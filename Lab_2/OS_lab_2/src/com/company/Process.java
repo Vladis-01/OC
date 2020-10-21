@@ -29,18 +29,25 @@ public class Process {
     public boolean start(){
         System.out.print("Процесс " + number + " начинает выполнение" + '\n');
         thread = threadQ.poll();
-        while(allTime <= time && thread != null){
-            allTime += thread.getSleepTime();
+        while(allTime + thread.getWorkTime() <= time && thread != null){
+            allTime += thread.getWorkTime();
             if(thread.start()){
                 threadQ.add(thread);
             }
 
             thread = threadQ.poll();
+            if(thread == null){
+                break;
+            }
         }
-        if(allTime > time){
-            System.out.print("Процесс " + number + " приостановлен." + " Времени затрачено: " + allTime + '\n' + '\n');
-            allTime = 0;
-            return true;
+        if(thread != null) {
+            threadQ.add(thread);
+            if (allTime + thread.getWorkTime() > time) {
+
+                System.out.print("Процесс " + number + " приостановлен." + " Времени затрачено: " + allTime + '\n' + '\n');
+                allTime = 0;
+                return true;
+            }
         }
         System.out.print("Процесс " + number + " выполнен" + " Времени затрачено: " + allTime + '\n' + '\n');
         return false;
