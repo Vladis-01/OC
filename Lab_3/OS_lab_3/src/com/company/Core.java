@@ -17,9 +17,14 @@ public class Core {
 
             Process process = new Process(i);
             createTable(process);
-            disk.addProcess(process);
-            addPageInOZU(process.getID(), 0);
-            addPageInOZU(process.getID(), 1);
+
+            List<Page> listPage = process.getListPage();
+
+            for(int j = 0; j < listPage.size(); j++){
+                Page page = listPage.get(j);
+                disk.addPage(page);
+                addPageInOZU(page.getProcessID(), j);
+            }
         }
     }
 
@@ -34,12 +39,11 @@ public class Core {
     public void addPageInOZU(int processID, int pageID){
         System.out.println("ОС требует страницу " + pageID + " процесса " + processID);
         if(ozu.getFreePlaceInMemory() > 0){
-            ozu.addPageINListPhysicalPage(processID, disk.getProcess(processID).getPage(pageID));
+            ozu.addPageINListPhysicalPage(processID, disk.getPage(pageID, processID));
         }else{
 
-            ozu.NRU(processID, disk.getProcess(processID).getPage(pageID));
+            ozu.NRU(processID, disk.getPage(pageID, processID));
         }
-
     }
 
     public void start(){

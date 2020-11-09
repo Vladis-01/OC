@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Disk {
-    private List<Process> listProcess = new ArrayList<>();
-    public void addProcess(Process process){
-        listProcess.add(process);
+    private List<Page> listPage = new ArrayList<>();
+    public void addPage(Page page){
+        listPage.add(page);
     }
 
-    public Process getProcess(int ID){
-        for(int i = 0; i < listProcess.size(); i++){
-            if(listProcess.get(i).getID() == ID){
-                return listProcess.get(i);
+    public Page getPage(int pageID, int processID){
+        for(int i = 0; i < listPage.size(); i++){
+            if(listPage.get(i).getPageID() == pageID && listPage.get(i).getProcessID() == processID){
+                return listPage.get(i);
             }
         }
         return null;
