@@ -33,7 +33,7 @@ public class Core {
 
     public void addPageInOZU(int processID, int pageID){
         System.out.println("ОС требует страницу " + pageID + " процесса " + processID);
-        if(ozu.getPhysicalMemorySize() > 0){
+        if(ozu.getFreePlaceInMemory() > 0){
             ozu.addPageINListPhysicalPage(processID, disk.getProcess(processID).getPage(pageID));
         }else{
 

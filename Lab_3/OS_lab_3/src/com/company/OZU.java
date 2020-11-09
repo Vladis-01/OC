@@ -6,8 +6,9 @@ import java.util.Random;
 
 public class OZU {
     final private int physicalMemorySize = 40; // 40 кб
-    public int getPhysicalMemorySize(){
-        return physicalMemorySize;
+    private int freePlaceInMemory = physicalMemorySize;
+    public int getFreePlaceInMemory(){
+        return freePlaceInMemory;
     }
     private List<Page> listPhysicalPage = new ArrayList<>();
 
@@ -25,7 +26,7 @@ public class OZU {
                 listTablePage.get(tablePageID).setRowPhysicalID(page.getPageID(), i);
             }
         }
-        physicalMemorySize -= 4;
+        freePlaceInMemory -= 4;
     }
 
     public void NRU(int tablePageID, Page page) {
