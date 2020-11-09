@@ -35,28 +35,6 @@ public class FileSegment implements Serializable{
     public void setNextIndexMemory(int nextIndexMemory) {
         this.nextIndexMemory = nextIndexMemory;
     }
-
-    public FileSegment clone() throws CloneNotSupportedException{
-
-        return (FileSegment) super.clone();
-    }
-
-    public FileSegment clone2(FileSegment fileSegment) throws IOException, ClassNotFoundException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream ous = new ObjectOutputStream(baos);
-
-
-        ous.writeObject(fileSegment);
-        ous.close();
-        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        ObjectInputStream ois = new ObjectInputStream(bais);
-
-        FileSegment cloneSegment = (FileSegment)ois.readObject();
-        cloneSegment.setNextIndexMemory(-1);
-        cloneSegment.setIndexInMemory(-1);
-        return  cloneSegment;
-    }
-
     @Override
     public String toString(){
         return "Сегмент " + segmentNumber;

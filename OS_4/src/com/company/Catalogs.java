@@ -52,25 +52,6 @@ public class Catalogs implements Serializable{
         return listFiles;
     }
 
-    public Catalogs clone() throws CloneNotSupportedException{
-        Catalogs catalogClone = (Catalogs) super.clone();
-        for(int i = 0; i < listFiles.size(); i++) {
-            if (catalogClone.getListFiles().get(i).getClass().getSimpleName().equals("Files")) {
-                Files file = (Files) catalogClone.getListFiles().get(i);
-                catalogClone.getListFiles().set(i, file.clone());
-            }
-
-            if (catalogClone.getListFiles().get(i).getClass().getSimpleName().equals("Catalogs")) {
-                Catalogs catalog = (Catalogs) catalogClone.getListFiles().get(i);
-                catalogClone.getListFiles().set(i, catalog.clone());
-            }
-        }
-
-        return catalogClone;
-    }
-
-
-
     public Catalogs clone2() throws IOException, ClassNotFoundException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream ous = new ObjectOutputStream(baos);
@@ -87,21 +68,8 @@ public class Catalogs implements Serializable{
 
         for(int i = 0; i < catalogClone.getListFiles().size(); i++) {
             if (catalogClone.getListFiles().get(i).getClass().getSimpleName().equals("Files")) {
-         //       baos = new ByteArrayOutputStream();
-         //       ous = new ObjectOutputStream(baos);
-
-
-         //       ous.writeObject(catalogClone.getListFiles().get(i));
-         //       ous.close();
-          //      bais = new ByteArrayInputStream(baos.toByteArray());
-          //      ois = new ObjectInputStream(bais);
-
-         //       Files cloneFile = (Files)ois.readObject();
                 Files files = (Files)catalogClone.getListFiles().get(i);
                 Files cloneFile = files.clone2();
-
-           //     cloneFile.setFirstSegmentIndexInDisk(cloneFile.clone2());
-
                 catalogClone.getListFiles().set(i, cloneFile);
             }
 
@@ -109,7 +77,6 @@ public class Catalogs implements Serializable{
                 Catalogs catalogs = (Catalogs)catalogClone.getListFiles().get(i);
                 catalogClone.setParentCatalog(null);
                 catalogClone.getListFiles().set(i, catalogs.clone2());
-
             }
         }
 

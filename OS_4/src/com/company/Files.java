@@ -109,31 +109,6 @@ public class Files implements Serializable{
         }
     }
 
-    public Files clone() throws CloneNotSupportedException{
-        Files cloneFile = (Files) super.clone();
-
-        boolean firstSegmentBool = true;
-        int firstSegment = -1;
-
-        for(int i = 0; i < countSegment; i++){
-            FileSegment cloneFileSegment = (FileSegment)getSegment(i).clone();
-            cloneFileSegment.setIndexInMemory(firstSegment);
-            cloneFileSegment.setNextIndexMemory(-1);
-
-            if(firstSegmentBool){
-                firstSegment = freeSegmentSearch();
-                firstSegmentBool = false;
-            }
-            Disk.memoryDisk[freeSegmentSearch()] = cloneFileSegment;
-
-            if(i < countSegment-1){
-                cloneFileSegment.setNextIndexMemory(freeSegmentSearch());
-            }
-        }
-        cloneFile.setFirstSegmentIndexInDisk(firstSegment);
-        return cloneFile;
-    }
-
     public Files clone2() throws IOException, ClassNotFoundException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream ous = new ObjectOutputStream(baos);
