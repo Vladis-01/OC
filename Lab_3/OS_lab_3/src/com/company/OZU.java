@@ -26,7 +26,7 @@ public class OZU {
                 listTablePage.get(tablePageID).setRowPhysicalID(page.getPageID(), i);
             }
         }
-        freePlaceInMemory -= 4;
+        freePlaceInMemory -= page.getMemorySize();
     }
 
     public void NRU(int tablePageID, Page page) {

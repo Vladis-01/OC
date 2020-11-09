@@ -19,4 +19,8 @@ public class Page {
     public int getProcessID() {
         return processID;
     }
+
+    public int getMemorySize() {
+        return memorySize;
+    }
 }
