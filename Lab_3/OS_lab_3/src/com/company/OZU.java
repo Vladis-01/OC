@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class OZU {
-    private int physicalMemorySize = 40; // 40 кб
+    final private int physicalMemorySize = 40; // 40 кб
     public int getPhysicalMemorySize(){
         return physicalMemorySize;
     }
