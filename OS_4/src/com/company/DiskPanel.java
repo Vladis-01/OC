@@ -21,7 +21,9 @@ public class DiskPanel extends JPanel {
 
         int coordX = 0;
         int coordY = 0;
+        int count = 0;
         for(int i = 0; i < Disk.memoryDisk.length; i++){
+            count++;
             if(Disk.memoryDisk[i] == null){
                 g.setColor(Color.GRAY);
             }
@@ -35,24 +37,11 @@ public class DiskPanel extends JPanel {
             g.fillRect(coordX, coordY, 10, 10);
             coordX += 15;;
 
-            if(i % 35 == 0 && i != 0){
+            if(count % 35 == 0){
                 coordY += 15;
                 coordX = 0;
+                count = 0;
             }
         }
-    }
-
-    public void selected(Graphics g, Vector<Integer> vector){
-        draw(g);
-        int coordX = 0;
-        int coordY = 0;
-        for(int i: vector){
-            g.setColor(Color.RED);
-            coordX = i % 35 * 15;
-            coordY = i / 35 * 15;
-            g.fillRect(coordX, coordY, 10, 10);
-
-        }
-
     }
 }

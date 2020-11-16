@@ -1,39 +1,4 @@
 package com.company;
-
- /*   public static void main(String[] args) {
-
-        JournalingFileSystem jfs = new JournalingFileSystem();
-        jfs.createFile("aaa");
-
-        jfs.createCatalog("bbb");
-        jfs.enlargeFile("aaa");
-        jfs.enlargeFile("aaa");
-
-        jfs.openCatalog("bbb");
-        jfs.createFile("ccc");
-        jfs.createFile("vvv");
-
-
-        jfs.enlargeFile("ccc");
-        jfs.enlargeFile("ccc");
-        jfs.enlargeFile("vvv");
-        jfs.enlargeFile("vvv");
-
-   //     jfs.returnToParentCatalog();
-
-        System.out.println(jfs.getSegmentVector());
-
-
-        for(int i = 0; i < Disk.memoryDisk.length; i++){
-            System.out.print(Disk.memoryDisk[i] + " ");
-            if(i % 10 == 0 && i != 0){
-                System.out.println();
-            }
-        }
-
-
-    }*/
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -56,9 +21,6 @@ public class Main{
     JournalingFileSystem jfs = new JournalingFileSystem();
     DefaultListModel dlm = new DefaultListModel();
 
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -72,16 +34,10 @@ public class Main{
         });
     }
 
-    /**
-     * Create the application.
-     */
     public Main() {
         initialize();
     }
 
-    /**
-     * Initialize the contents of the frame.
-     */
     private void initialize() {
         frame = new JFrame();
         frame.setBounds(100, 100, 767, 725);
@@ -136,13 +92,13 @@ public class Main{
         JButton btnOpen = new JButton("\u041E\u0442\u043A\u0440\u044B\u0442\u044C");
         btnOpen.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-          //      dlm.clear();
-                Catalogs catalog = (Catalogs)list.getSelectedValue();
-                jfs.openCatalog(list.getSelectedIndex());
-                textField_1.setText(textField_1.getText() + catalog.getNameCatalog() + "/");
-                dlm.clear();
-                dlm.addAll(jfs.getCurrentCatalog().getListFiles());
-
+                if(list.getSelectedValue().getClass().getSimpleName().equals("Catalogs")){
+                    Catalogs catalog = (Catalogs)list.getSelectedValue();
+                    jfs.openCatalog(list.getSelectedIndex());
+                    textField_1.setText(textField_1.getText() + catalog.getNameCatalog() + "/");
+                    dlm.clear();
+                    dlm.addAll(jfs.getCurrentCatalog().getListFiles());
+                }
             }
         });
         btnOpen.setBounds(125, 260, 135, 23);
