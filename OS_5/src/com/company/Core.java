@@ -11,9 +11,13 @@ import java.util.Random;
 public class Core {
     private Deque<Process> processesQ = new LinkedList<>();
     private Deque<Process> processesQ2 = new LinkedList<>();
+    private Queue<Process> interruptQ = new LinkedList<>();
     private Process processes;
+    private Process processesCash;
     private int allTime = 0;
     private int allTime2 = 0;
+    private int interruptTime = 2000;
+    private boolean interruptCheck = true;
     Timer timer;
 
     public void planningWithoutControlledInterrupt() {
@@ -29,21 +33,43 @@ public class Core {
                 processes = processesQ.pollFirst();
             }
             if(check == 3){
-                System.out.println("Произошло прерывание для взаимодействия с устройством ввода/вывода, планировщик не остоновлен");
-                Process processCash = processes;
-                processes = processesQ.pollFirst();
+                if(interruptCheck){
+                    interruptCheck = false;
+                    interrupt();
+                }else{
+                    interruptQ.add(processes);
+                    processes = processesQ.pollFirst();
+                }
+            }
+            while (!interruptCheck && processes == null){}
 
-                timer = new Timer(2000, new ActionListener() {
-                public void actionPerformed(ActionEvent ev) {
-                    processesQ.addFirst(processCash);
-                    System.out.println("Взаимодействие с устройством ввода/вывода окончено, процесс " + processCash.getNumber() +
-                            " разблокирован и продолжит выполнение");
-                    timer.stop();
-                }});
-                timer.start();
+            if(processes == null && interruptQ.peek() != null){
+                processes = interruptQ.poll();
+                interruptCheck = false;
+                interrupt();
+            }
+            if(processes == null && interruptQ.peek() == null){
+                processes = processesQ.poll();
             }
         }
         System.out.println("Время с использованием управляемого прерывания: " + allTime + " мс" + '\n');
+    }
+
+    public void interrupt(){
+        processesCash = processes;
+        System.out.println("Произошло прерывание для взаимодействия с устройством ввода/вывода, планировщик не остановлен");
+        processes = processesQ.pollFirst();
+
+        timer = new Timer(interruptTime, new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                processesQ.addFirst(processesCash);
+
+                System.out.println("Взаимодействие с устройством ввода/вывода окончено, процесс " + processesCash.getNumber() +
+                        " разблокирован и продолжит выполнение");
+                timer.stop();
+                interruptCheck = true;
+            }});
+        timer.start();
     }
 
     public void planningWithSoftwareInterrupt() {
@@ -59,15 +85,15 @@ public class Core {
                 processes = processesQ2.pollFirst();
             }
             if(check == 3){
-                System.out.println("Произошло прерывание для взаимодействия с устройством ввода/вывода , планировщик остоновлен");
+                System.out.println("Произошло прерывание для взаимодействия с устройством ввода/вывода , планировщик остановлен");
                 Process processCash = processes;
 
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(interruptTime);
                     processesQ.addFirst(processCash);
                     System.out.println("Взаимодействие с устройством ввода/вывода окончено, процесс " + processCash.getNumber() +
                             " разблокирован и продолжит выполнение");
-                    allTime2 += 2000;
+                    allTime2 += interruptTime;
                 } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }

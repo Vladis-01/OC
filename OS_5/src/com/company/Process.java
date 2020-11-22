@@ -6,7 +6,7 @@ public class Process {
     int time = 0;
     int maxTime;
     boolean interrupt;
-    Timer timer;
+    int workTime = 1000;
     boolean end = false;
 
     Process(int number, int maxTime, boolean interrupt){
@@ -32,13 +32,13 @@ public class Process {
             System.out.print("Процесс " + number + " начинает выполнение" + '\n');
             time = 0;
 
-            time += 1000;
+            time += workTime;
             if (maxTime < time) {
                 System.out.print("Процессу " + number + " не хватило кванта времени" + '\n');
                 return 1;
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(workTime);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
@@ -52,7 +52,7 @@ public class Process {
         }
 
         if(end){
-            time += 1000;
+            time += workTime;
             if(maxTime > time){
                 System.out.print("Процессу " + number + " не хватило кванта времени" + '\n');
                 return 1;
@@ -60,7 +60,7 @@ public class Process {
 
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(workTime);
             } catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
