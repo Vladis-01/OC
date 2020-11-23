@@ -14,13 +14,14 @@ public class Core {
     private Queue<Process> interruptQ = new LinkedList<>();
     private Process processes;
     private Process processesCash;
+    private Process processesCash2;
     private int allTime = 0;
     private int allTime2 = 0;
     private int interruptTime = 2000;
     private boolean interruptCheck = true;
     Timer timer;
 
-    public void planningWithoutControlledInterrupt() {
+    public int planningWithoutControlledInterrupt() {
         System.out.println("Управляемое прерывание: ");
         processes = processesQ.pollFirst();
         while(processes != null){
@@ -53,6 +54,7 @@ public class Core {
             }
         }
         System.out.println("Время с использованием управляемого прерывания: " + allTime + " мс" + '\n');
+        return processesCash.getTime();
     }
 
     public void interrupt(){
@@ -72,7 +74,7 @@ public class Core {
         timer.start();
     }
 
-    public void planningWithSoftwareInterrupt() {
+    public int planningWithSoftwareInterrupt() {
         System.out.println("Программное прерывание: ");
         processes = processesQ2.pollFirst();
         while(processes != null){
@@ -86,20 +88,22 @@ public class Core {
             }
             if(check == 3){
                 System.out.println("Произошло прерывание для взаимодействия с устройством ввода/вывода , планировщик остановлен");
-                Process processCash = processes;
+                processesCash2 = processes;
 
                 try {
                     Thread.sleep(interruptTime);
-                    processesQ.addFirst(processCash);
-                    System.out.println("Взаимодействие с устройством ввода/вывода окончено, процесс " + processCash.getNumber() +
+                    processesQ.addFirst(processesCash2);
+                    System.out.println("Взаимодействие с устройством ввода/вывода окончено, процесс " + processesCash2.getNumber() +
                             " разблокирован и продолжит выполнение");
                     allTime2 += interruptTime;
+                    processesCash2.addTime(interruptTime);
                 } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
             }
         }
         System.out.println("Время с использованием программного прерывания: " + allTime2 + " мс" + '\n');
+        return processesCash2.getTime();
     }
 
     public void createProcess(int quantityProcess) {
@@ -120,6 +124,5 @@ public class Core {
             }
             processesQ2.add(processes);
         }
-
     }
 }

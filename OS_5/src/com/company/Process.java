@@ -23,6 +23,10 @@ public class Process {
         return time;
     }
 
+    public void addTime(int time){
+        this.time += time;
+    }
+
     public void setInterrupt(boolean interrupt) {
         this.interrupt = interrupt;
     }
